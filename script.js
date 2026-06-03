@@ -1,74 +1,125 @@
-// مصفوفة الأذكار التلقائية للسبحة
-const sebhaPhrases = [
-    { text: "الحمد لله", target: 33 },
-    { text: "سبحان الله", target: 33 },
-    { text: "الله أكبر", target: 33 },
-    { text: "لا إله إلا الله وحده لا شريك له", target: 1 }
+// سلسلة الأذكار المتتالية اليدوية مع صياغة الجملة الإرشادية لكل قسم
+const thikrChain = [
+    { name: "سُبْحَانَ اللهِ 📿", cleanName: "سُبْحَانَ اللهِ", limit: 33 },
+    { name: "الحَمْدُ للهِ 🤲", cleanName: "الحَمْدُ للهِ", limit: 33 },
+    { name: "اللهُ أَكْبَرُ 🌟", cleanName: "اللهُ أَكْبَرُ", limit: 33 },
+    { name: "لا إله إلا الله وحده لا شريك له ✨", cleanName: "التهليل", limit: 1 }
 ];
 
-let currentPhraseIndex = 0; let currentCounter = 0; let globalTotalCounter = 0; 
+let chainIndex = 0; 
+let counterValue = 0; 
 
-// دالة تفعيل الوضع الليلي
-function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
+function openSebhaModal() {
+    document.getElementById("sebhaModal").style.display = "flex";
+    document.getElementById("mainContentWrapper").classList.add("blur-active");
+    updateThikrDisplay();
 }
 
-function openSebhaModal() { document.getElementById('sebhaModal').style.display = 'flex'; updateSebhaUI(); }
-function closeSebhaModal() { document.getElementById('sebhaModal').style.display = 'none'; }
-
-function updateSebhaUI() {
-    const current = sebhaPhrases[currentPhraseIndex];
-    document.getElementById('sebhaCount').innerText = currentCounter;
-    document.getElementById('currentPhrase').innerText = current.text;
-    document.getElementById('phraseTargetText').innerText = `المطلوب: ${current.target} مرة`;
-    document.getElementById('totalCount').innerText = globalTotalCounter;
-    const progressPercent = (currentCounter / current.target) * 100;
-    document.getElementById('progressBar').style.width = `${progressPercent}%`;
+function closeSebhaModal() {
+    document.getElementById("sebhaModal").style.display = "none";
+    document.getElementById("mainContentWrapper").classList.remove("blur-active");
 }
 
-function incrementSebha() {
-    const current = sebhaPhrases[currentPhraseIndex];
-    currentCounter++; globalTotalCounter++;
-    if (currentCounter >= current.target) {
-        currentCounter = 0; currentPhraseIndex++; 
-        if (currentPhraseIndex >= sebhaPhrases.length) {
-            currentPhraseIndex = 0; globalTotalCounter = 0; 
-            alert("أحسنت! تم إكمال دورة التسبيح كاملة، وتمت إعادة الضبط تلقائياً.");
-            closeSebhaModal();
+// دالة التحديث لبناء الجملة الإرشادية بخط صغير تحت الكلمة مباشرة
+function updateThikrDisplay() {
+    if (chainIndex < thikrChain.length) {
+        const currentData = thikrChain[chainIndex];
+        
+        // 1. طباعة الكلمة الكبيرة
+        document.getElementById("thikrTitle").innerText = currentData.name;
+        
+        // 2. صياغة وطباعة السطر الصغير المطلوب بالضبط تحت الكلمة مباشرة
+        if(currentData.limit > 1) {
+            document.getElementById("thikrInstruction").innerText = `قُل ${currentData.cleanName} ${currentData.limit} مرّة`;
+        } else {
+            document.getElementById("thikrInstruction").innerText = `قُلْهَا مَرَّةً وَاحِدَةً جَزَاكَ اللَّهُ خَيْرًا`;
         }
-        const modalContent = document.querySelector('#sebhaModal .modal-content');
-        modalContent.classList.add('flash-effect');
-        setTimeout(() => modalContent.classList.remove('flash-effect'), 400);
+        
+        // 3. طباعة رقم العداد الحالي الضخم بالأسفل
+        document.getElementById("sebhaCount").innerText = counterValue;
+    } else {
+        document.getElementById("thikrTitle").innerText = "🎉 تم إنهاء السلسلة";
+        document.getElementById("thikrInstruction").innerText = "تقبل الله صالح أعمالكم";
+        document.getElementById("sebhaCount").innerText = "✓";
     }
-    updateSebhaUI();
 }
 
-function resetSebha() { currentPhraseIndex = 0; currentCounter = 0; globalTotalCounter = 0; updateSebhaUI(); }
+function handleSebhaClick() {
+    if (chainIndex >= thikrChain.length) {
+        resetChain();
+        return;
+    }
 
-// كود عداد أذكار البطاقات
+    const currentThikr = thikrChain[chainIndex];
+    counterValue++; 
+    
+    if (counterValue >= currentThikr.limit) {
+        chainIndex++; 
+        counterValue = 0; 
+    }
+    
+    updateThikrDisplay(); 
+}
+
+function resetChain() {
+    chainIndex = 0;
+    counterValue = 0;
+    updateThikrDisplay();
+}
+
+function toggleTheme() {
+    const body = document.body;
+    const txt = document.getElementById("themeBtnText");
+    if (body.classList.contains("dark-mode")) {
+        body.classList.replace("dark-mode", "light-mode");
+        if(txt) txt.innerText = "نهاري";
+        localStorage.setItem("theme", "light");
+    } else {
+        body.classList.replace("light-mode", "dark-mode");
+        if(txt) txt.innerText = "ليلي";
+        localStorage.setItem("theme", "dark");
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem("theme");
+    const txt = document.getElementById("themeBtnText");
+    if (savedTheme === "light") {
+        document.body.classList.replace("dark-mode", "light-mode");
+        if(txt) txt.innerText = "نهاري";
+    }
+    updateThikrDisplay();
+});
+
+function toggleMenu() {
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("sidebarOverlay");
+    sidebar.style.right = sidebar.style.right === "0px" ? "-280px" : "0px";
+    overlay.style.display = overlay.style.display === "block" ? "none" : "block";
+}
+
+function shareSite() {
+    const shareText = `أدعوكم لزيارة موقع الأذكار والسبحة المتتالية الذكية: ${window.location.href}`;
+    window.open(`https://whatsapp.com{encodeURIComponent(shareText)}`, '_blank');
+}
+
 function reduceCount(element) {
     let numElement = element.querySelector('.num');
     if (numElement) {
         let currentCount = parseInt(numElement.innerText);
-        if (!isNaN(currentCount)) {
-            if (currentCount > 1) { numElement.innerText = currentCount - 1; } 
-            else {
-                numElement.innerText = "✓ تم";
-                element.style.opacity = "0.4";
-                element.style.backgroundColor = "#e2ece9";
-            }
+        if (!isNaN(currentCount) && currentCount > 1) {
+            numElement.innerText = currentCount - 1;
+        } else {
+            numElement.innerText = "تم بحمد الله";
+            element.style.opacity = "0.35";
         }
     }
 }
 
-// قاعدة بيانات الأدعية الموسعة الجديدة بالكامل
 const duaaData = {
     rizq: { title: "أدعية طلب الرزق والتيسير", text: "«اللَّهُمَّ إنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا» <br><br> «اللَّهُمَّ اكْفِنِي بِحَلَالِكَ عَنْ حَرَامِكَ، وَأَغْنِنِي بِفَضْلِكَ عَمَّنْ سِوَاكَ»" },
     shifa: { title: "أدعية الشفاء للمريض", text: "«اللَّهُمَّ رَبَّ النَّاسِ أَذْهِبِ الْبَاسَ، اشْفِهِ وَأَنْتَ الشَّافِي، لَا شِفَاءَ إِلَّا شِفَاؤُكَ، شِفَاءً لَا يُغَادِرُ سَقَمًا»" },
-    faraj: { title: "أدعية تفريج الهم والكرب", text: "«لَّا إِلَٰهَ إِلَّا أَنتَ سُبْحَانَكَ إِنِّي كُنتُ مِنَ الظَّالِمِينَ» <br><br> «اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ...»" },
-    mait: { title: "أدعية للمتوفى (الميت)", text: "«اللَّهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ، وَعَافِهِ وَاعْفُ عَنْهُ، وَأَكْرِمْ نُزُلَهُ، وَوَسِّعْ مُدْخَلَهُ، وَاغْسِلْهُ بِالْمَاءِ وَالثَّلْجِ وَالْبَرَدِ»" },
-    najah: { title: "أدعية النجاح والتوفيق", text: "«اللَّهُمَّ لَا سَهْلَ إِلَّا مَا جَعَلْتَهُ سَهْلًا، وَأَنْتَ تَجْعَلُ الْحَزَنَ إِذَا شِئْتَ سَهْلًا» <br><br> «رَبِّ اشْرَحْ لِي صَدْرِي* وَيَسِّرْ لِي أَمْرِي»" },
-    safar: { title: "دعاء السفر والركوب", text: "«سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَٰذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ * وَإِنَّا إِلَىٰ رَبِّنَا لَمُنقَلِبُونَ» <br><br> «اللَّهُمَّ إنَّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا الْبِرَّ وَالتَّقْوَى»" }
+    faraj: { title: "أدعية تفريج الهم والكرب", text: "«لَّا إِلَٰهَ إِلَّا أَنتَ سُبْحَانَكَ إِنِّي كُنتُ مِنَ الظَّالِمِينَ» <br><br> «اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالعَجْزِ وَالكَسَلِ، وَالبُخْلِ وَالْجُبْنِ»" }
 };
 
 function showDuaa(type) {
@@ -76,6 +127,7 @@ function showDuaa(type) {
     document.getElementById('modalText').innerHTML = duaaData[type].text;
     document.getElementById('duaaModal').style.display = 'flex';
 }
+
 function closeModal() { document.getElementById('duaaModal').style.display = 'none'; }
 
 function copyDuaa() {
@@ -84,6 +136,6 @@ function copyDuaa() {
     const tempTextArea = document.createElement('textarea');
     tempTextArea.value = cleanText; document.body.appendChild(tempTextArea);
     tempTextArea.select(); tempTextArea.setSelectionRange(0, 99999);
-    try { document.execCommand('copy'); alert("تم نسخ الدعاء بنجاح!"); } catch (err) { alert("عذراً، فشل النسخ."); }
+    try { document.execCommand('copy'); alert("تم نسخ الدعاء بنجاح!"); } catch (err) { alert("فشل النسخ."); }
     document.body.removeChild(tempTextArea);
 }
