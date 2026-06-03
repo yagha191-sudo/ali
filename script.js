@@ -1,9 +1,50 @@
-const thikrChain = [
+// تشغيل الاتصال الحي بفايربيس فور فتح الموقع
+const firebaseConfig = {
+    apiKey: "AIzaSyBrGTJnMD7fDH4G4-w6cCc-864Z31g1TT8",
+    authDomain: "athkar-app-ddba2.firebaseapp.com",
+    databaseURL: "https://firebaseio.com",
+    projectId: "athkar-app-ddba2",
+    storageBucket: "athkar-app-ddba2.firebasestorage.app",
+    messagingSenderId: "996299888457",
+    appId: "1:996299888457:web:ea2ba329abd9db4709ac98"
+};
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+let thikrChain = [
     { name: "سُبْحَانَ اللهِ 📿", cleanName: "سُبْحَانَ اللهِ", limit: 33 },
-    { name: "الحَمْدُ للهِ 🤲", cleanName: "الحَمْدُ للهِ", limit: 33 },
-    { name: "اللهُ أَكْبَرُ 🌟", cleanName: "اللهُ أَكْبَرُ", limit: 33 },
-    { name: "لا إله إلا الله وحده لا شريك له ✨", cleanName: "التهليل", limit: 1 }
+    { name: "الحَمْدُ للهِ 🤲", cleanName: "الحَمْدُ للهِ", limit: 33 }
 ];
+
+function loadLiveSettings() {
+    database.ref('settings').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if(data) {
+            if(data.themeColor) {
+                document.querySelector("header").style.backgroundColor = data.themeColor;
+                document.querySelectorAll(".btn").forEach(b => b.style.backgroundColor = data.themeColor);
+            }
+            if(data.bgImage) {
+                document.body.style.backgroundImage = `url('${data.bgImage}')`;
+                document.body.style.backgroundSize = "cover";
+                document.body.style.backgroundPosition = "center";
+            }
+        }
+    });
+
+    database.ref('thikr').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if(data) {
+            thikrChain = Object.values(data);
+            updateThikrDisplay();
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadLiveSettings();
+});
+
 
 let chainIndex = 0; 
 let counterValue = 0; 
