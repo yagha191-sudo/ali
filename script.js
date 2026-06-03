@@ -1,4 +1,3 @@
-// سلسلة الأذكار المتتالية اليدوية مع صياغة الجملة الإرشادية لكل قسم
 const thikrChain = [
     { name: "سُبْحَانَ اللهِ 📿", cleanName: "سُبْحَانَ اللهِ", limit: 33 },
     { name: "الحَمْدُ للهِ 🤲", cleanName: "الحَمْدُ للهِ", limit: 33 },
@@ -20,27 +19,28 @@ function closeSebhaModal() {
     document.getElementById("mainContentWrapper").classList.remove("blur-active");
 }
 
-// دالة التحديث لبناء الجملة الإرشادية بخط صغير تحت الكلمة مباشرة
 function updateThikrDisplay() {
+    const titleElement = document.getElementById("thikrTitle");
+    const instructionElement = document.getElementById("thikrInstruction");
+    const countElement = document.getElementById("sebhaCount");
+
     if (chainIndex < thikrChain.length) {
         const currentData = thikrChain[chainIndex];
+        if (titleElement) titleElement.innerText = currentData.name;
         
-        // 1. طباعة الكلمة الكبيرة
-        document.getElementById("thikrTitle").innerText = currentData.name;
-        
-        // 2. صياغة وطباعة السطر الصغير المطلوب بالضبط تحت الكلمة مباشرة
-        if(currentData.limit > 1) {
-            document.getElementById("thikrInstruction").innerText = `قُل ${currentData.cleanName} ${currentData.limit} مرّة`;
-        } else {
-            document.getElementById("thikrInstruction").innerText = `قُلْهَا مَرَّةً وَاحِدَةً جَزَاكَ اللَّهُ خَيْرًا`;
+        if (instructionElement) {
+            if (currentData.limit > 1) {
+                instructionElement.innerText = `قُل ${currentData.cleanName} ${currentData.limit} مرّة`;
+            } else {
+                instructionElement.innerText = `قُلْهَا مَرَّةً وَاحِدَةً جَزَاكَ اللَّهُ خَيْرًا`;
+            }
         }
         
-        // 3. طباعة رقم العداد الحالي الضخم بالأسفل
-        document.getElementById("sebhaCount").innerText = counterValue;
+        if (countElement) countElement.innerText = counterValue;
     } else {
-        document.getElementById("thikrTitle").innerText = "🎉 تم إنهاء السلسلة";
-        document.getElementById("thikrInstruction").innerText = "تقبل الله صالح أعمالكم";
-        document.getElementById("sebhaCount").innerText = "✓";
+        if (titleElement) titleElement.innerText = "🎉 تم إنهاء السلسلة";
+        if (instructionElement) instructionElement.innerText = "تقبل الله صالح أعمالكم";
+        if (countElement) countElement.innerText = "✓";
     }
 }
 
@@ -81,21 +81,15 @@ function toggleTheme() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    const savedTheme = localStorage.getItem("theme");
-    const txt = document.getElementById("themeBtnText");
-    if (savedTheme === "light") {
-        document.body.classList.replace("dark-mode", "light-mode");
-        if(txt) txt.innerText = "نهاري";
-    }
-    updateThikrDisplay();
-});
-
 function toggleMenu() {
     const sidebar = document.getElementById("sidebar");
     const overlay = document.getElementById("sidebarOverlay");
-    sidebar.style.right = sidebar.style.right === "0px" ? "-280px" : "0px";
-    overlay.style.display = overlay.style.display === "block" ? "none" : "block";
+    if (sidebar) {
+        sidebar.style.right = sidebar.style.right === "0px" ? "-280px" : "0px";
+    }
+    if (overlay) {
+        overlay.style.display = overlay.style.display === "block" ? "none" : "block";
+    }
 }
 
 function shareSite() {
@@ -116,6 +110,17 @@ function reduceCount(element) {
     }
 }
 
+function resetAllBottomCards() {
+    document.querySelectorAll('.card').forEach(card => {
+        const numElement = card.querySelector('.num');
+        if(numElement) {
+            numElement.innerText = numElement.getAttribute('data-max');
+            card.style.opacity = "1";
+        }
+    });
+    alert("تم إعادة شحن جميع الأذكار السفلية!");
+}
+
 const duaaData = {
     rizq: { title: "أدعية طلب الرزق والتيسير", text: "«اللَّهُمَّ إنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا» <br><br> «اللَّهُمَّ اكْفِنِي بِحَلَالِكَ عَنْ حَرَامِكَ، وَأَغْنِنِي بِفَضْلِكَ عَمَّنْ سِوَاكَ»" },
     shifa: { title: "أدعية الشفاء للمريض", text: "«اللَّهُمَّ رَبَّ النَّاسِ أَذْهِبِ الْبَاسَ، اشْفِهِ وَأَنْتَ الشَّافِي، لَا شِفَاءَ إِلَّا شِفَاؤُكَ، شِفَاءً لَا يُغَادِرُ سَقَمًا»" },
@@ -123,12 +128,19 @@ const duaaData = {
 };
 
 function showDuaa(type) {
-    document.getElementById('modalTitle').innerText = duaaData[type].title;
-    document.getElementById('modalText').innerHTML = duaaData[type].text;
-    document.getElementById('duaaModal').style.display = 'flex';
+    const titleElement = document.getElementById('modalTitle');
+    const textElement = document.getElementById('modalText');
+    const modalElement = document.getElementById('duaaModal');
+    
+    if (titleElement) titleElement.innerText = duaaData[type].title;
+    if (textElement) textElement.innerHTML = duaaData[type].text;
+    if (modalElement) modalElement.style.display = 'flex';
 }
 
-function closeModal() { document.getElementById('duaaModal').style.display = 'none'; }
+function closeModal() { 
+    const modalElement = document.getElementById('duaaModal');
+    if (modalElement) modalElement.style.display = 'none'; 
+}
 
 function copyDuaa() {
     const htmlText = document.getElementById('modalText').innerHTML;
@@ -139,3 +151,13 @@ function copyDuaa() {
     try { document.execCommand('copy'); alert("تم نسخ الدعاء بنجاح!"); } catch (err) { alert("فشل النسخ."); }
     document.body.removeChild(tempTextArea);
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem("theme");
+    const txt = document.getElementById("themeBtnText");
+    if (savedTheme === "light") {
+        document.body.classList.replace("dark-mode", "light-mode");
+        if(txt) txt.innerText = "نهاري";
+    }
+    updateThikrDisplay();
+});

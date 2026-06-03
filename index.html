@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>موقع الأذكار والمسلم اليومي</title>
-    <!-- ربط ملف التصميم والألوان الخارجي -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="dark-mode">
@@ -18,7 +17,7 @@
         </header>
 
         <div class="container">
-            <!-- زر فتح السبحة المنبثقة -->
+            <!-- زر فتح السبحة المنبثقة الفخم -->
             <div class="open-sebha-container">
                 <button class="btn btn-open-sebha" onclick="openSebhaModal()">فتح شاشة التسبيح المتتالي 📿</button>
             </div>
@@ -31,7 +30,7 @@
                 <button class="btn-duaa" onclick="showDuaa('faraj')">✨ أدعية تفريج الهم والكرب</button>
             </div>
 
-            <!-- قسم الأذكار السفلية الطويلة -->
+            <!-- قسم الأذكار السفلية الطويلة الكاملة -->
             <h2 class="section-title">أذكار الصباح والمساء</h2>
             <div class="card" onclick="reduceCount(this)">
                 <p class="thikr-text">"أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ"</p>
@@ -72,19 +71,13 @@
         </footer>
     </div>
 
-    <!-- نافذة التسبيح المركزية المعدلة (السطر الصغير تحت الكلمة مباشرة) -->
+    <!-- نافذة التسبيح المركزية المنبثقة المتجاوبة -->
     <div class="sebha-modal-overlay" id="sebhaModal">
         <div class="sebha-popup-box">
-            <!-- الكلمة الكبيرة في الأعلى -->
             <h2 id="thikrTitle">--</h2>
-            
-            <!-- السطر الصغير الإرشادي الجديد تحت الكلمة مباشرة بناءً على طلبك -->
             <div class="sub-target-text" id="thikrInstruction">قُل سُبْحَانَ اللهِ 33 مرّة</div>
-            
-            <!-- عداد الأرقام الضخم بالمنتصف -->
             <div class="huge-counter" id="sebhaCount">0</div>
             
-            <!-- زر النقر اليدوي المخصص للجوال -->
             <button class="btn btn-click-inside" onclick="handleSebhaClick()">اضغط للتسبيح 👆</button>
             
             <div class="popup-footer-btns">
@@ -94,7 +87,7 @@
         </div>
     </div>
 
-    <!-- القائمة الجانبية (3 شخوط) -->
+    <!-- القائمة الجانبية (3 شخوط) مدمج بها الوضع الليلي والنهاري لترتيب شكل الواجهة -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMenu()"></div>
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
