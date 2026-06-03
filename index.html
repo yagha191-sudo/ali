@@ -3,60 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>موقع الأذكار والأدعية المستجابة</title>
-    <!-- ربط ملف التصميم والألوان خارجيًا -->
+    <title>حصن المسلم والسبحة الذكية</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- زر وضع الليل في الأعلى -->
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌓 الوضع الليلي</button>
+
     <header>
-        <h1>وَمَنْ أَعْرَضَ عَنْ ذِكْرِي فَإِنَّ لَهُ مَعِيشَةً ضَنْكًا</h1>
+        <h1>وَمَنْ أَعْرَضَ عن ذِكْرِي فَإِنَّ لَهُ مَعِيشَةً ضَنْكًا</h1>
         <p class="subtitle">حصن المسلم اليومي - صدقة جارية</p>
     </header>
 
     <div class="container">
         
-        <!-- قسم السبحة الإلكترونية -->
-        <div class="sebha-section">
-            <h3>السبحة الإلكترونية</h3>
-            <div class="counter" id="sebhaCount">0</div>
-            <div class="btn-group">
-                <button class="btn" onclick="incrementSebha()">اضغط للتسبيح</button>
-                <button class="btn btn-reset" onclick="resetSebha()">تصفير</button>
-            </div>
+        <!-- زر فتح السبحة الذكية مباشرة في الأعلى -->
+        <div class="duaa-buttons-container">
+            <button class="btn-sebha-toggle" onclick="openSebhaModal()">📿 فتح السبحة الإلكترونية الذكية</button>
         </div>
 
-        <!-- قسم أزرار الأدعية -->
+        <!-- قسم أزرار الأدعية الموسع -->
         <h2 class="section-title">أدعية مستجابة ومأثورة</h2>
         <div class="duaa-buttons-container">
             <button class="btn-duaa" onclick="showDuaa('rizq')">🤲 أدعية طلب الرزق والتيسير</button>
             <button class="btn-duaa" onclick="showDuaa('shifa')">❤️ أدعية الشفاء للمريض</button>
             <button class="btn-duaa" onclick="showDuaa('faraj')">✨ أدعية تفريج الهم والكرب</button>
+            <button class="btn-duaa" onclick="showDuaa('mait')">🖤 أدعية للمتوفى (الميت)</button>
+            <button class="btn-duaa" onclick="showDuaa('najah')">🎓 أدعية النجاح والتوفيق</button>
+            <button class="btn-duaa" onclick="showDuaa('safar')">✈️ دعاء السفر والركوب</button>
         </div>
 
-        <!-- قسم أذكار الصباح -->
-        <h2 class="section-title">أذكار الصباح</h2>
-        
-        <div class="card" onclick="reduceCount(this)">
-            <p>"أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ"</p>
-            <span class="count-badge">التكرار المطلوب: <span class="num">3</span></span>
-        </div>
+        <!-- قسم أذكار الصباح والمساء -->
+        <h2 class="section-title">أذكار الصباح والمساء</h2>
+        <div class="card" onclick="reduceCount(this)"><p>"أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ"</p><span class="count-badge">التكرار: <span class="num">3</span></span></div>
+        <div class="card" onclick="reduceCount(this)"><p>"اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ..."</p><span class="count-badge">التكرار: <span class="num">1</span></span></div>
+        <div class="card" onclick="reduceCount(this)"><p>"أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لَا إِلَهَ إِلَّا اللهُ..."</p><span class="count-badge">التكرار: <span class="num">3</span></span></div>
 
-        <div class="card" onclick="reduceCount(this)">
-            <p>"اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ..."</p>
-            <span class="count-badge">التكرار المطلوب: <span class="num">1</span></span>
-        </div>
+        <!-- قسم أذكار بعد الصلاة -->
+        <h2 class="section-title">أذكار بعد الصلاة المفروضة</h2>
+        <div class="card" onclick="reduceCount(this)"><p>"أستغفر الله، أستغفر الله، أستغفر الله. اللهم أنت السلام ومنك السلام تباركت يا ذا الجلال والإكرام"</p><span class="count-badge">التكرار: <span class="num">1</span></span></div>
+        <div class="card" onclick="reduceCount(this)"><p>"لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير"</p><span class="count-badge">التكرار: <span class="num">1</span></span></div>
 
-        <!-- قسم أذكار المساء -->
-        <h2 class="section-title">أذكار المساء</h2>
-
-        <div class="card" onclick="reduceCount(this)">
-            <p>"أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ"</p>
-            <span class="count-badge">التكرار المطلوب: <span class="num">3</span></span>
-        </div>
+        <!-- قسم أذكار النوم -->
+        <h2 class="section-title">أذكار النوم</h2>
+        <div class="card" onclick="reduceCount(this)"><p>"بِاسْمِكَ رَبِّي وَضَعْتُ جَنْبِي، وَبِكَ أَرْفَعُهُ، فَإِنْ أَمْسَكْتَ نَفْسِي فَارْحَمْهَا..."</p><span class="count-badge">التكرار: <span class="num">1</span></span></div>
+        <div class="card" onclick="reduceCount(this)"><p>"اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ"</p><span class="count-badge">التكرار: <span class="num">3</span></span></div>
 
     </div>
 
+    <!-- نافذة السبحة المنبثقة -->
+    <div class="modal" id="sebhaModal">
+        <div class="modal-content" style="max-width: 450px; padding: 25px 20px; border-radius: 24px;">
+            <div class="total-stats">إجمالي التسبيح: <span id="totalCount">0</span></div>
+            <div class="target-phrase" id="currentPhrase">الحمد لله</div>
+            <div class="target-sub" id="phraseTargetText">المطلوب: 33 مرة</div>
+            <div class="counter-circle" onclick="incrementSebha()">
+                <span id="sebhaCount">0</span>
+                <span class="click-tip">اضغط للتسبيح</span>
+            </div>
+            <div class="progress-container" style="width: 100%;"><div class="progress-bar" id="progressBar"></div></div>
+            <div class="modal-actions" style="margin-top: 15px;">
+                <button class="modal-btn btn-reset" onclick="resetSebha()">تصفير</button>
+                <button class="modal-btn close-btn" onclick="closeSebhaModal()">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة الأدعية المنبثقة -->
     <div class="modal" id="duaaModal">
         <div class="modal-content">
             <h3 id="modalTitle" style="color: #2c5d4f;"></h3>
@@ -69,10 +83,9 @@
     </div>
 
     <footer>
-        <p>الدال على الخير كفاعله |   غافلة النجاة   </p>
+        <p>الدال على الخير كفاعله |غافلة النجاة</p>
     </footer>
 
-    <script href="script.js" src="script.js"></script>
-
+    <script src="script.js"></script>
 </body>
 </html>
